@@ -1,5 +1,21 @@
 package org.kunicki.reactive.core.processor;
 
-public class FilteringProcessor<T> {
+import java.util.function.Predicate;
 
+public class FilteringProcessor<T> extends ProcessorBase<T, T> {
+
+    private final Predicate<T> predicate;
+
+    public FilteringProcessor(Predicate<T> predicate) {
+        this.predicate = predicate;
+    }
+
+    @Override
+    public void onNext(T item) {
+        if (predicate.test(item)) {
+            submit(item);
+        }
+
+        subscription.request(1);
+    }
 }
