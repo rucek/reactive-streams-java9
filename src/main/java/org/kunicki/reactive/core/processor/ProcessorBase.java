@@ -5,7 +5,8 @@ import org.kunicki.reactive.core.subscriber.SubscriberBase;
 import java.util.concurrent.Flow;
 import java.util.concurrent.SubmissionPublisher;
 
-public abstract class ProcessorBase<In, Out> extends SubscriberBase<In> implements Flow.Publisher<Out> {
+// should IS-A processor
+public abstract class ProcessorBase<In, Out> extends SubscriberBase<In> implements Flow.Publisher<Out>, Flow.Processor<In, Out> {
 
     private final SubmissionPublisher<Out> submissionPublisher = new SubmissionPublisher<>();
 
@@ -25,6 +26,6 @@ public abstract class ProcessorBase<In, Out> extends SubscriberBase<In> implemen
     }
 
     void submit(Out item) {
-        submissionPublisher.submit(item);
+        submissionPublisher.submit(item); // technically, can throw -- should try/catch->onError?
     }
 }
