@@ -51,6 +51,10 @@ public class SimplePublisher implements Flow.Publisher<Integer> {
 
         @Override
         public void request(long n) {
+            if (n <= 0) {
+                subscriber.onError(new IllegalArgumentException());
+            }
+
             for (long demand = n; demand > 0 && iterator.hasNext(); demand--) {
                 subscriber.onNext(iterator.next());
             }
