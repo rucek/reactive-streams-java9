@@ -14,8 +14,7 @@ public class SimplePublisher implements Flow.Publisher<Integer> {
 
     @Override
     public void subscribe(Flow.Subscriber<? super Integer> subscriber) {
-        iterator.forEachRemaining(subscriber::onNext);
-        subscriber.onComplete();
+        subscriber.onSubscribe(new SimpleSubscription(subscriber));
     }
 
     public static void main(String[] args) {
@@ -40,5 +39,24 @@ public class SimplePublisher implements Flow.Publisher<Integer> {
                 System.out.println("complete");
             }
         });
+    }
+
+    private class SimpleSubscription implements Flow.Subscription {
+
+        private final Flow.Subscriber<? super Integer> subscriber;
+
+        public SimpleSubscription(Flow.Subscriber<? super Integer> subscriber) {
+            this.subscriber = subscriber;
+        }
+
+        @Override
+        public void request(long n) {
+
+        }
+
+        @Override
+        public void cancel() {
+
+        }
     }
 }
