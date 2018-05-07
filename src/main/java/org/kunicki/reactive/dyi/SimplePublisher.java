@@ -51,7 +51,13 @@ public class SimplePublisher implements Flow.Publisher<Integer> {
 
         @Override
         public void request(long n) {
+            for (long demand = n; demand > 0 && iterator.hasNext(); demand--) {
+                subscriber.onNext(iterator.next());
+            }
 
+            if (!iterator.hasNext()) {
+                subscriber.onComplete();
+            }
         }
 
         @Override
